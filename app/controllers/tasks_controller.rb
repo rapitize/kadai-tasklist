@@ -1,14 +1,10 @@
 class TasksController < ApplicationController
-  #before_action :set_task, only: [:show, :edit, :update, :destroy]
-  before_action :require_user_logged_in, only: [:index, :create, :destroy]
+  before_action :require_user_logged_in
   before_action :correct_user, only: [:show, :edit, :update, :destroy]
 
 
   def index
     @tasks = Task.all
-    if logged_in?
-      @pagy, @tasks = pagy(current_user.tasks.order(id: :desc))
-    end
   end
 
   def show
@@ -26,7 +22,7 @@ class TasksController < ApplicationController
     else
       @pagy, @tasks = pagy(current_user.tasks.order(id: :desc))
       flash.now[:danger] = 'Task の投稿に失敗しました。'
-      render 'tasks/index'
+      render 'tasks/new'
     end
   end
 
@@ -46,13 +42,6 @@ class TasksController < ApplicationController
 
 
   def destroy
-=begin
-    @task.destroy
-
-    flash[:success] = 'Task は正常に削除されました'
-    redirect_to tasks_url
-=end
-
     @task.destroy
     flash[:success] = 'Taskを削除しました。'
     redirect_back(fallback_location: tasks_url)
@@ -62,11 +51,6 @@ class TasksController < ApplicationController
   private
 
   # Strong Parameter
-
-  #def set_task
-  #  @task = Task.find(params[:id])
-  #end
-
 
   def task_params
     params.require(:task).permit(:content, :status)
