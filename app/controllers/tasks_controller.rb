@@ -5,9 +5,7 @@ class TasksController < ApplicationController
 
   def index
     @tasks = Task.all
-    if logged_in?
-      @pagy, @tasks = pagy(current_user.tasks)
-    end
+    @pagy, @tasks = pagy(current_user.tasks)
   end
 
   def show
@@ -23,7 +21,7 @@ class TasksController < ApplicationController
       flash[:success] = 'Task を投稿しました。'
       redirect_to @task
     else
-      @pagy, @tasks = pagy(current_user.tasks.order(id: :desc))
+      #@pagy, @tasks = pagy(current_user.tasks.order(id: :desc))
       flash.now[:danger] = 'Task の投稿に失敗しました。'
       render 'tasks/new'
     end
