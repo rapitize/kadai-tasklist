@@ -4,7 +4,6 @@ class TasksController < ApplicationController
 
 
   def index
-    @tasks = Task.all
     @pagy, @tasks = pagy(current_user.tasks)
   end
 
